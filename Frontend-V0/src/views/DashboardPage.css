@@ -1,0 +1,166 @@
+.dashboard-page {
+  animation: fadeIn 0.4s ease;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  grid-template-rows: auto auto;
+  gap: var(--space-md);
+  grid-template-areas:
+    "chart orderbook"
+    "trades orderpanel";
+}
+
+.dashboard-grid.order-active {
+  grid-template-areas:
+    "chart orderpanel"
+    "trades orderbook";
+}
+
+.dashboard-chart {
+  grid-area: chart;
+  min-height: 450px;
+}
+
+.dashboard-orderbook {
+  grid-area: orderbook;
+  max-height: 450px;
+  overflow: hidden;
+  view-transition-name: orderbook-panel;
+}
+
+.dashboard-trades {
+  grid-area: trades;
+}
+
+.dashboard-order-panel {
+  grid-area: orderpanel;
+  view-transition-name: orderpanel-panel;
+}
+
+
+
+@media (max-width: 1400px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 280px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "chart"
+      "orderbook"
+      "orderpanel"
+      "trades";
+  }
+
+  .dashboard-grid.order-active {
+    grid-template-areas:
+      "chart"
+      "orderpanel"
+      "orderbook"
+      "trades";
+  }
+
+  .dashboard-orderbook {
+    max-height: 400px;
+  }
+}
+
+/* View Transition Overrides */
+::view-transition-group(orderbook-panel),
+::view-transition-group(orderpanel-panel) {
+  animation-duration: 0.35s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+/* ===== FULLSCREEN TRADING OVERLAY ===== */
+.dashboard-page.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--bg-primary);
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+/* Redefine grid inside fullscreen to only show chart and order panel */
+.dashboard-page.is-fullscreen .dashboard-grid {
+  display: flex !important;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  gap: 0;
+}
+
+.dashboard-page.is-fullscreen .dashboard-chart {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transition: width 0.3s ease;
+  min-height: auto; /* overrides min-height: 450px */
+}
+
+.dashboard-page.is-fullscreen .dashboard-chart.panel-open {
+  width: 75%;
+}
+
+.dashboard-page.is-fullscreen .dashboard-orderbook,
+.dashboard-page.is-fullscreen .dashboard-trades,
+.dashboard-page.is-fullscreen .dashboard-portfolio,
+/* Hide normal order panel location in normal grid when fullscreen */
+.dashboard-page.is-fullscreen .dashboard-order-panel {
+  display: none !important;
+}
+
+/* Place Order button injected into chart-controls */
+.dashboard-fs-place-order-btn {
+  background-color: var(--color-buy);
+  color: white;
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+}
+.dashboard-fs-place-order-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Slide in drawer container that wraps the newly injected OrderPanel */
+.dashboard-fs-order-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 25%;
+  min-width: 320px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border-primary);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  z-index: 100;
+}
+.dashboard-fs-order-drawer.open {
+  transform: translateX(0);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+}
+.dashboard-fs-order-drawer .order-panel {
+  border: none;
+  border-radius: 0;
+  height: 100%;
+  box-shadow: none;
+}
+

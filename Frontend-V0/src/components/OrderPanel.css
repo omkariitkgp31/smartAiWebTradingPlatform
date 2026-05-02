@@ -1,0 +1,611 @@
+/* ================================================
+   ORDER PANEL — Professional Trading UI
+   ================================================ */
+
+.order-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Accent border top based on side ── */
+.op-buy {
+  border-top: 2px solid var(--color-buy);
+}
+
+.op-sell {
+  border-top: 2px solid var(--color-sell);
+}
+
+/* ================================================
+   HEADER
+   ================================================ */
+
+.op-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.op-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.op-title {
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.op-symbol-badge {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  background: var(--accent-muted);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--radius-sm);
+  padding: 1px 7px;
+  letter-spacing: 0.04em;
+}
+
+.op-live-price {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.op-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-buy);
+  animation: liveBlip 2s ease-in-out infinite;
+}
+
+@keyframes liveBlip {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+}
+
+/* ================================================
+   BUY / SELL TOGGLE
+   ================================================ */
+
+.op-side-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin: 0 16px;
+}
+
+.op-side-btn {
+  padding: 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid transparent;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 12px;
+  border-radius: calc(var(--radius-md) - 2px);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: background var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Inactive states — show semantic color so they're visible in light mode */
+.op-buy-btn {
+  color: var(--color-buy);
+}
+
+.op-sell-btn {
+  color: var(--color-sell);
+}
+
+.op-buy-btn:hover {
+  color: var(--color-buy-dim);
+}
+
+.op-sell-btn:hover {
+  color: var(--color-sell-dim);
+}
+
+.op-buy-btn.active {
+  background: var(--color-buy);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.op-sell-btn.active {
+  background: var(--color-sell);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.order-type-tabs {
+  display: flex;
+  margin: 12px 16px 0;
+  gap: 2px;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+}
+
+.op-type-tab {
+  flex: 1;
+  padding: 10px 0;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.op-type-tab:hover {
+  color: var(--text-primary);
+}
+
+.op-type-tab.active {
+  background: var(--bg-elevated);
+  color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ================================================
+   FORM BODY
+   ================================================ */
+
+.order-form,
+.op-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.order-panel .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-panel .form-group label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.order-panel .form-group input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.order-panel .form-group input:focus {
+  border-color: var(--accent);
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  pointer-events: none;
+}
+
+.input-with-icon input {
+  padding-left: 28px !important;
+}
+
+.order-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid var(--border-primary);
+  margin-top: 4px;
+}
+
+.total-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.total-value {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.op-error-msg {
+  font-size: var(--text-xs);
+  color: var(--color-sell);
+  margin-top: 2px;
+}
+
+/* ── Market notice ── */
+.op-market-notice {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 10px;
+  background: var(--color-info-bg);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--color-info);
+  font-weight: 500;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ── Field ── */
+.op-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.op-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.op-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.op-label-unit {
+  color: var(--text-muted);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.op-max-hint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.op-input-wrap {
+  position: relative;
+}
+
+.op-input-prefix {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  pointer-events: none;
+}
+
+.op-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  padding: 9px 12px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.op-input-wrap .op-input {
+  padding-left: 24px;
+}
+
+
+
+.op-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.op-summary-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.op-summary-value {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.op-confirm-total .op-summary-label,
+.op-confirm-total .op-summary-value {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.op-insufficient {
+  color: var(--color-sell) !important;
+}
+
+.op-insufficient-flag {
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+/* ================================================
+   SUBMIT BUTTON
+   ================================================ */
+
+.op-submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  border: none;
+}
+
+.op-submit-buy {
+  background: var(--color-buy);
+  color: #fff;
+}
+
+.op-submit-buy:hover:not(:disabled) {
+  background: var(--color-buy-dim);
+  transform: translateY(-1px);
+}
+
+.op-submit-sell {
+  background: var(--color-sell);
+  color: #fff;
+}
+
+.op-submit-sell:hover:not(:disabled) {
+  background: var(--color-sell-dim);
+  transform: translateY(-1px);
+}
+
+.op-submit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Submitting state */
+.op-submitting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.op-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ================================================
+   FEEDBACK
+   ================================================ */
+
+.op-feedback {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  animation: feedbackSlide 0.25s ease;
+}
+
+@keyframes feedbackSlide {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.op-feedback-success {
+  background: var(--color-buy-bg);
+  color: var(--color-buy);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.op-feedback-error {
+  background: var(--color-sell-bg);
+  color: var(--color-sell);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* ================================================
+   CONFIRMATION OVERLAY
+   ================================================ */
+
+.op-confirm-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 15, 25, 0.88);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: inherit;
+  animation: fadeIn 0.18s ease;
+}
+
+.op-confirm-box {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-hover);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  width: calc(100% - 32px);
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.22s ease;
+}
+
+.op-confirm-title {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.op-confirm-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.op-confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.op-confirm-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.op-confirm-total {
+  padding-top: 6px;
+  border-top: 1px solid var(--border-hover) !important;
+  border-bottom: none !important;
+}
+
+.op-confirm-total span {
+  font-size: var(--text-base) !important;
+  font-weight: 800 !important;
+}
+
+.op-confirm-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.op-confirm-cancel {
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-hover);
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.op-confirm-cancel:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.op-confirm-submit {
+  padding: 10px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  border: none;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+/* ================================================
+   BTN UTILITIES (matching global App.css)
+   ================================================ */
+
+.btn-buy {
+  background: var(--color-buy);
+  color: #fff;
+}
+
+.btn-sell {
+  background: var(--color-sell);
+  color: #fff;
+}
