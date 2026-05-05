@@ -1,7 +1,8 @@
 // @ts-nocheck
 /**
  * Custom Canvas 2D Candlestick Chart Engine
- * Renders candles, volume histogram, moving averages, crosshair, and tooltips.
+ * Renders candles, volume histogram, moving averages, crosshair, user drawings, and tooltips.
+ * Utilizes two canvas layers: main (for static/base chart) and overlay (for interactive elements).
  */
 export default class ChartEngine {
   constructor(container, options = {}) {
@@ -88,6 +89,9 @@ export default class ChartEngine {
     };
   }
 
+  /**
+   * Binds necessary mouse and wheel events to the overlay canvas for interactions.
+   */
   _bindEvents() {
     this._onMouseMove = this._handleMouseMove.bind(this);
     this._onMouseLeave = this._handleMouseLeave.bind(this);
@@ -102,6 +106,10 @@ export default class ChartEngine {
     window.addEventListener('mouseup', this._onMouseUp);
   }
 
+  /**
+   * Handles mouse movement to update crosshair position, handle chart panning (if dragging),
+   * update active drawings in progress, and trigger tooltip updates.
+   */
   _handleMouseMove(e) {
     const rect = this.overlayCanvas.getBoundingClientRect();
     this.mouseX = (e.clientX - rect.left) * this.dpr;
@@ -148,6 +156,10 @@ export default class ChartEngine {
     this.renderOverlay();
   }
 
+  /**
+   * Handles scroll events to implement chart zooming.
+   * Zooms in/out by adjusting the visibleCount while keeping the zoom centered on the current mouse position.
+   */
   _handleWheel(e) {
     e.preventDefault();
     const delta = e.deltaY > 0 ? 1 : -1;
@@ -168,6 +180,10 @@ export default class ChartEngine {
     this.renderOverlay();
   }
 
+  /**
+   * Handles click events to start/complete user drawings (lines, shapes, text).
+   * Also initiates chart panning if the active tool is for navigation (cursor, etc).
+   */
   _handleMouseDown(e) {
     const defaultTools = ['cursor', 'crosshair', 'measure', 'magnet'];
     if (!defaultTools.includes(this.activeTool) && this.activeTool !== 'eraser') {
@@ -258,6 +274,10 @@ export default class ChartEngine {
     }
   }
 
+  /**
+   * Updates the hovered candle state based on the current mouse X coordinate.
+   * Triggers the onTooltip callback with the hovered candle data.
+   */
   _updateHover() {
     if (this.mouseX < 0 || !this.candles.length) {
       this.hoveredCandle = null;
@@ -289,6 +309,10 @@ export default class ChartEngine {
     }
   }
 
+  /**
+   * Calculates the drawing boundaries for the chart, accounting for padding
+   * and the split between the price area (top) and volume area (bottom).
+   */
   _getChartArea() {
     const { paddingLeft, paddingRight, paddingTop, paddingBottom, volumeHeightRatio } = this.options;
     const w = this.width - paddingLeft - paddingRight;
@@ -356,6 +380,9 @@ export default class ChartEngine {
 
   // ─── Data ────────────────────────────────────────────────────────
 
+  /**
+   * Loads the dataset of candlesticks and auto-scrolls the view to show the most recent candles.
+   */
   setData(candles) {
     this.candles = candles || [];
     // Auto-scroll to end
@@ -378,6 +405,10 @@ export default class ChartEngine {
 
   // ─── Rendering ───────────────────────────────────────────────────
 
+  /**
+   * Adjusts the canvas dimensions to match its container element,
+   * accounting for the device pixel ratio to ensure crisp rendering on high-DPI screens.
+   */
   resize() {
     const rect = this.container.getBoundingClientRect();
     this.dpr = window.devicePixelRatio || 1;
@@ -399,6 +430,10 @@ export default class ChartEngine {
     this.renderOverlay();
   }
 
+  /**
+   * Primary render loop for the base chart layer.
+   * Clears the main canvas and draws the grid, volume, candles, moving averages, scales, and user drawings.
+   */
   renderMain() {
     const ctx = this.mainCtx;
     ctx.clearRect(0, 0, this.width, this.height);
@@ -465,6 +500,10 @@ export default class ChartEngine {
     this._drawUserShapes(ctx, area, priceRange);
   }
 
+  /**
+   * Renders user-created shapes (trendlines, fibonacci, rectangles, text, etc.)
+   * by converting their stored time/price coordinates into canvas pixel coordinates.
+   */
   _drawUserShapes(ctx, area, priceRange) {
     const visible = this._getVisibleCandles();
     if (!visible.length) return;
@@ -685,6 +724,10 @@ export default class ChartEngine {
     }
   }
 
+  /**
+   * Renders the interactive overlay layer.
+   * Draws the crosshair lines, axis labels for the cursor position, and highlights the hovered candle.
+   */
   renderOverlay() {
     const ctx = this.overlayCtx;
     ctx.clearRect(0, 0, this.width, this.height);
@@ -788,6 +831,9 @@ export default class ChartEngine {
 
   // ─── Lifecycle ───────────────────────────────────────────────────
 
+  /**
+   * Cleans up event listeners and removes the canvas elements from the DOM.
+   */
   destroy() {
     this.overlayCanvas.removeEventListener('mousemove', this._onMouseMove);
     this.overlayCanvas.removeEventListener('mouseleave', this._onMouseLeave);
@@ -801,6 +847,9 @@ export default class ChartEngine {
 
   // ─── Undo/Redo ───────────────────────────────────────────────────
 
+  /**
+   * Reverts the most recently added user drawing.
+   */
   undo() {
     if (this.drawings.length > 0) {
       this.redoList.push(this.drawings.pop());
@@ -808,6 +857,9 @@ export default class ChartEngine {
     }
   }
 
+  /**
+   * Restores the most recently undone user drawing.
+   */
   redo() {
     if (this.redoList.length > 0) {
       this.drawings.push(this.redoList.pop());
@@ -815,6 +867,9 @@ export default class ChartEngine {
     }
   }
 
+  /**
+   * Removes all active user drawings from the chart, adding them to the redo list.
+   */
   clearDrawings() {
     if (this.drawings.length > 0) {
       this.redoList = [...this.drawings].reverse().concat(this.redoList);
