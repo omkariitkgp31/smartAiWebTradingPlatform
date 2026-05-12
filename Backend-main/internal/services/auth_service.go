@@ -79,7 +79,7 @@ func (s *AuthService) Register(ctx context.Context, email, password string) erro
 		user := &models.User{
 			Email:        normalizedEmail,
 			PasswordHash: passwordHash,
-			IsVerified:   false,
+			IsVerified:   true, // Bypassing OTP verification for now
 		}
 		if err := s.repo.CreateUser(ctx, user); err != nil {
 			return utils.NewAppError(500, "db_error", "Failed to create user", err)
@@ -87,6 +87,9 @@ func (s *AuthService) Register(ctx context.Context, email, password string) erro
 	} else {
 		if err := s.repo.UpdateUserPassword(ctx, normalizedEmail, passwordHash); err != nil {
 			return utils.NewAppError(500, "db_error", "Failed to update user", err)
+		}
+		if err := s.repo.SetUserVerified(ctx, normalizedEmail, true); err != nil {
+			return utils.NewAppError(500, "db_error", "Failed to verify existing user", err)
 		}
 	}
 
