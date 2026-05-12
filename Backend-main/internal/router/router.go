@@ -20,6 +20,7 @@ func New(cfg *config.Config, authHandler *handlers.AuthHandler, tokenManager *ut
 	}
 
 	r := gin.New()
+	r.Use(middleware.CORS())
 	r.Use(middleware.RequestLogger(logger))
 	r.Use(middleware.Recovery(logger))
 	r.Use(middleware.SecurityHeaders())
