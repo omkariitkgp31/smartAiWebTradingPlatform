@@ -36,13 +36,14 @@ func New(cfg *config.Config, authHandler *handlers.AuthHandler, tokenManager *ut
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
-	r.POST("/register", authHandler.Register)
-	r.POST("/verify-otp", authHandler.VerifyOTP)
-	r.POST("/login", authHandler.Login)
-	r.POST("/resend-otp", authHandler.ResendOTP)
-	r.POST("/refresh", authHandler.Refresh)
+	identity := r.Group("/api/identity")
+	identity.POST("/register", authHandler.Register)
+	identity.POST("/verify-otp", authHandler.VerifyOTP)
+	identity.POST("/login", authHandler.Login)
+	identity.POST("/resend-otp", authHandler.ResendOTP)
+	identity.POST("/refresh", authHandler.Refresh)
 
-	protected := r.Group("/")
+	protected := identity.Group("/")
 	protected.Use(middleware.AuthMiddleware(tokenManager))
 	protected.GET("/me", authHandler.Me)
 
