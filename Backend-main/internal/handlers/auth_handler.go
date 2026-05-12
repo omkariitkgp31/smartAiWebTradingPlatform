@@ -53,7 +53,7 @@ type refreshRequest struct {
 func (h *AuthHandler) Register(c *gin.Context) {
 	var req registerRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.WriteError(c, http.StatusBadRequest, "invalid_request", "Invalid request body")
+		utils.WriteError(c, http.StatusBadRequest, "invalid_request", fmt.Sprintf("Invalid request body: %v", err))
 		return
 	}
 
@@ -70,7 +70,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 func (h *AuthHandler) VerifyOTP(c *gin.Context) {
 	var req verifyOTPRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.WriteError(c, http.StatusBadRequest, "invalid_request", "Invalid request body")
+		utils.WriteError(c, http.StatusBadRequest, "invalid_request", fmt.Sprintf("Invalid request body: %v", err))
 		return
 	}
 
@@ -93,7 +93,7 @@ func (h *AuthHandler) VerifyOTP(c *gin.Context) {
 func (h *AuthHandler) Login(c *gin.Context) {
 	var req loginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.WriteError(c, http.StatusBadRequest, "invalid_request", "Invalid request body")
+		utils.WriteError(c, http.StatusBadRequest, "invalid_request", fmt.Sprintf("Invalid request body: %v", err))
 		return
 	}
 
@@ -115,7 +115,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 func (h *AuthHandler) ResendOTP(c *gin.Context) {
 	var req resendOTPRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.WriteError(c, http.StatusBadRequest, "invalid_request", "Invalid request body")
+		utils.WriteError(c, http.StatusBadRequest, "invalid_request", fmt.Sprintf("Invalid request body: %v", err))
 		return
 	}
 
@@ -132,7 +132,7 @@ func (h *AuthHandler) ResendOTP(c *gin.Context) {
 func (h *AuthHandler) Refresh(c *gin.Context) {
 	var req refreshRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		utils.WriteError(c, http.StatusBadRequest, "invalid_request", "Invalid request body")
+		utils.WriteError(c, http.StatusBadRequest, "invalid_request", fmt.Sprintf("Invalid request body: %v", err))
 		return
 	}
 
