@@ -30,8 +30,8 @@ func main() {
 
 	r.POST("/notify", handlers.Notify)
 	r.GET("/notifications/:user_id", handlers.GetNotifications)
-	r.PUT("/notifications/:id/read", handlers.MarkRead)
-	r.PUT("/notifications/:user_id/read-all", handlers.MarkAllRead)
+	r.PUT("/notifications/read/:id", handlers.MarkRead)
+	r.PUT("/notifications/read-all/:user_id", handlers.MarkAllRead)
 
 	log.Printf("🚀 %s running on :%s", cfg.AppName, cfg.AppPort)
 	r.Run(":" + cfg.AppPort)

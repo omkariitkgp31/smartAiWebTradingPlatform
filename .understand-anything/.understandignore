@@ -1,0 +1,38 @@
+# .understandignore - patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore (globs, # comments, ! negation, trailing / for dirs)
+# Lines below are suggestions - uncomment to activate.
+# Use ! prefix to force-include something excluded by defaults.
+#
+# Built-in defaults (always excluded unless negated):
+#   node_modules/, .git/, dist/, build/, obj/, *.lock, *.min.js, etc.
+#
+.understand-anything/
+*.exe
+*.tsbuildinfo
+
+# --- From .gitignore (uncomment to exclude) ---
+
+# .next/
+# out/
+# .vscode/
+# .idea/
+# *.swp
+# *.swo
+# .DS_Store
+# npm-debug.log*
+# yarn-debug.log*
+# yarn-error.log*
+# logs/
+# .env
+# .env.local
+# .env.development.local
+# .env.test.local
+# .env.production.local
+# tmp/
+# temp/
+
+# --- Test file patterns (uncomment to exclude) ---
+
+# *.test.*
+# *.spec.*
+# *.snap
