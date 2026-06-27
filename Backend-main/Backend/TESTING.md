@@ -123,7 +123,18 @@ curl -X POST http://localhost:8080/api/identity/register -H "Content-Type: appli
 
 ### 3. Log in to get an Auth Token
 ```bash
-curl -X POST http://localhost:8080/api/identity/login -H "Content-Type: application/json" -d "{\"email\":\"test@test.com\",\"password\":\"password123\"}"
+$body = @{
+    email = "test@test.com"
+    username = "trader1"
+    password = "password123"
+    full_name = "Test User"
+} | ConvertTo-Json
+
+Invoke-WebRequest `
+    -Uri "http://localhost:8080/api/identity/register" `
+    -Method POST `
+    -ContentType "application/json" `
+    -Body $body
 ```
 *(Look closely at the output and copy the long string labelled `"access_token"`. You need this for the next step!)*
 
